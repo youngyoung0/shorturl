@@ -1,4 +1,4 @@
-package numble.shorturl.infrastructure.config.persistence;
+package numble.shorturl.infrastructure.persistence;
 
 import numble.shorturl.domain.Url;
 import org.springframework.data.jpa.repository.JpaRepository;

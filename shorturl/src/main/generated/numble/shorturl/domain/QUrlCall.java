@@ -21,7 +21,7 @@ public class QUrlCall extends EntityPathBase<UrlCall> {
 
     public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
 
-    public final StringPath browser = createString("browser");
+    public final EnumPath<Browser> browser = createEnum("browser", Browser.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdTime = _super.createdTime;

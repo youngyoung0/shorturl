@@ -30,7 +30,7 @@ public class QUrl extends EntityPathBase<Url> {
 
     public final StringPath short_url = createString("short_url");
 
-    public final StringPath status = createString("status");
+    public final EnumPath<Status> status = createEnum("status", Status.class);
 
     public QUrl(String variable) {
         super(Url.class, forVariable(variable));

@@ -16,7 +16,7 @@ public class UrlQueryRepository {
     }
 
     public Long findUrlIdMax(){
-        return query.select(url.id.max().coalesce(1L))
+        return query.select(url.id.max().coalesce(0L))
                 .from(url)
                 .fetchOne();
     }

@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.querydsl.core.types.Path;
 public class QUrlCall extends EntityPathBase<UrlCall> {
 
     private static final long serialVersionUID = -133858779L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QUrlCall urlCall = new QUrlCall("urlCall");
 
@@ -28,16 +31,27 @@ public class QUrlCall extends EntityPathBase<UrlCall> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final QUrl url;
+
     public QUrlCall(String variable) {
-        super(UrlCall.class, forVariable(variable));
+        this(UrlCall.class, forVariable(variable), INITS);
     }
 
     public QUrlCall(Path<? extends UrlCall> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QUrlCall(PathMetadata metadata) {
-        super(UrlCall.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QUrlCall(PathMetadata metadata, PathInits inits) {
+        this(UrlCall.class, metadata, inits);
+    }
+
+    public QUrlCall(Class<? extends UrlCall> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.url = inits.isInitialized("url") ? new QUrl(forProperty("url")) : null;
     }
 
 }

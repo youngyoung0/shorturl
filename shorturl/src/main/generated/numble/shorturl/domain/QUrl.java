@@ -26,9 +26,9 @@ public class QUrl extends EntityPathBase<Url> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath origin_url = createString("origin_url");
+    public final StringPath originUrl = createString("originUrl");
 
-    public final StringPath short_url = createString("short_url");
+    public final StringPath shortUrl = createString("shortUrl");
 
     public final EnumPath<Status> status = createEnum("status", Status.class);
 

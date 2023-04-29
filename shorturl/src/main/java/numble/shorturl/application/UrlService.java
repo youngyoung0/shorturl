@@ -17,13 +17,14 @@ public class UrlService {
 
         Long urlMaxId = urlQueryRepository.findUrlIdMax();
         String encodingUrl = UrlEncodingService.encoding(urlMaxId);
+        String shortUrl = MAIN_URL + "/" +encodingUrl;
 
         urlRepository.save(
                 Url.builder()
-                .origin_url(url)
-                .short_url(encodingUrl)
+                .originUrl(url)
+                .shortUrl(shortUrl)
                 .build());
 
-        return MAIN_URL + "/" +encodingUrl;
+        return shortUrl;
     }
 }

@@ -1,28 +1,28 @@
 package numble.shorturl.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Url extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String origin_url;
-    private String short_url;
+    @Column(name = "origin_url")
+    private String originUrl;
+    @Column(name = "short_url")
+    private String shortUrl;
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Builder
-    public Url(String origin_url, String short_url){
-        this.origin_url = origin_url;
-        this.short_url = short_url;
+    public Url(String originUrl, String shortUrl){
+        this.originUrl = originUrl;
+        this.shortUrl = shortUrl;
         this.status = Status.ACTIVATION;
     }
 
-    public Url() {
-
-    }
 }

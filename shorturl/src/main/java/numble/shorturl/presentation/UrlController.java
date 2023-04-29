@@ -1,6 +1,7 @@
 package numble.shorturl.presentation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import numble.shorturl.application.UrlService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

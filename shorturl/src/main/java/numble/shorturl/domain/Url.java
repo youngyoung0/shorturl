@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,12 +22,15 @@ public class Url extends BaseTimeEntity {
     private String shortUrl;
     @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(name="expired_time")
+    private String expiredTime;
 
     @Builder
     public Url(String originUrl, String shortUrl){
         this.originUrl = originUrl;
         this.shortUrl = shortUrl;
         this.status = Status.ACTIVATION;
+        this.expiredTime = LocalDateTime.now(ZoneOffset.UTC).plusDays(1).toString();
     }
 
 }

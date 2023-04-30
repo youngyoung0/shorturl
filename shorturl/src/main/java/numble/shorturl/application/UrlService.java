@@ -44,9 +44,8 @@ public class UrlService {
     public String callUrl(HttpServletRequest request, String encodingUrl) {
 
         Url findUrl = findUrl(encodingUrl);
-        Browser browser = searchBrowser(request);
 
-        urlHistorySave(browser, findUrl);
+        urlHistorySave(request, findUrl);
 
         // TODO 만료 인증 확인
 
@@ -65,7 +64,9 @@ public class UrlService {
                 .findAny().get();
     }
 
-    private void urlHistorySave(Browser browser, Url url) {
+    private void urlHistorySave(HttpServletRequest request, Url url) {
+        Browser browser = searchBrowser(request);
+
         urlCallRepository.save(
                 UrlCall.builder()
                         .browser(browser)

@@ -13,6 +13,9 @@ import java.time.ZoneOffset;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Url extends BaseTimeEntity {
+
+    private static final int expireDate = 1;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +33,7 @@ public class Url extends BaseTimeEntity {
         this.originUrl = originUrl;
         this.shortUrl = shortUrl;
         this.status = Status.ACTIVATION;
-        this.expiredTime = LocalDateTime.now(ZoneOffset.UTC).plusDays(1).toString();
+        this.expiredTime = LocalDateTime.now(ZoneOffset.UTC).plusDays(expireDate).toString();
     }
 
 }

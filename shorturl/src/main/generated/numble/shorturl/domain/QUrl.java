@@ -24,13 +24,15 @@ public class QUrl extends EntityPathBase<Url> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdTime = _super.createdTime;
 
+    public final StringPath expiredTime = createString("expiredTime");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath origin_url = createString("origin_url");
+    public final StringPath originUrl = createString("originUrl");
 
-    public final StringPath short_url = createString("short_url");
+    public final StringPath shortUrl = createString("shortUrl");
 
-    public final StringPath status = createString("status");
+    public final EnumPath<Status> status = createEnum("status", Status.class);
 
     public QUrl(String variable) {
         super(Url.class, forVariable(variable));

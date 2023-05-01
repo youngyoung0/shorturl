@@ -19,14 +19,14 @@ public class Url extends BaseTimeEntity {
     private String shortUrl;
     @Enumerated(EnumType.STRING)
     private Status status;
-    private String expiredTime;
+    private LocalDateTime expiredTime;
 
     @Builder
     public Url(String originUrl, String shortUrl, Status status, int expireDate){
         this.originUrl = originUrl;
         this.shortUrl = shortUrl;
         this.status = status;
-        this.expiredTime = LocalDateTime.now(ZoneOffset.UTC).plusDays(expireDate).toString();
+        this.expiredTime = LocalDateTime.now(ZoneOffset.UTC).plusDays(expireDate);
     }
 
 }

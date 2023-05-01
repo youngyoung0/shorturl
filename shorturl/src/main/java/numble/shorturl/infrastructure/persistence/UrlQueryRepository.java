@@ -26,10 +26,19 @@ public class UrlQueryRepository {
                 .fetchOne();
     }
 
-    public Optional<Url> findByOriginUrlAndExpiration(String findUrl){
+    public Optional<Url> findNonRemoveByOriginUrl(String findUrl){
         return Optional.ofNullable(query.select(url)
                 .from(url)
                 .where(url.originUrl.eq(findUrl)
+                        .and(url.status.ne(Status.REMOVE))
+                )
+                .fetchOne());
+    }
+
+    public Optional<Url> findNonRemoveUrlById(Long id){
+        return Optional.ofNullable(query.select(url)
+                .from(url)
+                .where(url.id.eq(id)
                         .and(url.status.ne(Status.REMOVE))
                 )
                 .fetchOne());

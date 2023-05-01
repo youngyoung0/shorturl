@@ -1,20 +1,16 @@
 package numble.shorturl.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Url extends BaseTimeEntity {
-
-    private static final int expireDate = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +22,10 @@ public class Url extends BaseTimeEntity {
     private String expiredTime;
 
     @Builder
-    public Url(String originUrl, String shortUrl){
+    public Url(String originUrl, String shortUrl, Status status, int expireDate){
         this.originUrl = originUrl;
         this.shortUrl = shortUrl;
-        this.status = Status.ACTIVATION;
+        this.status = status;
         this.expiredTime = LocalDateTime.now(ZoneOffset.UTC).plusDays(expireDate).toString();
     }
 

@@ -3,8 +3,10 @@ package numble.shorturl.application;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import numble.shorturl.domain.Browser;
+import numble.shorturl.domain.Status;
 import numble.shorturl.domain.Url;
 import numble.shorturl.domain.UrlCall;
+import numble.shorturl.domain.dto.UrlShortDto;
 import numble.shorturl.infrastructure.persistence.UrlCallRepository;
 import numble.shorturl.infrastructure.persistence.UrlQueryRepository;
 import numble.shorturl.infrastructure.persistence.UrlRepository;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +28,10 @@ public class UrlService {
     private static final String MAIN_URL = "localhost:8080/";
 
     @Transactional
-    public String urlIssue(String url) {
+    public String urlIssue(UrlShortDto urlShortDto) {
+
+        // 생성하려는 URL이 있는지 확인 있으면 삭제
+        findOriginUrl(urlShortDto);
 
         long urlMaxId = urlQueryRepository.findUrlIdMax() + 1;
         String encodingUrl = UrlEncodingService.encoding(urlMaxId);
@@ -33,10 +39,10 @@ public class UrlService {
 
         urlRepository.save(
                 Url.builder()
-                        .originUrl(url)
+                        .originUrl(urlShortDto.getUrl())
                         .shortUrl(shortUrl)
+                        .status(urlShortDto.getStatus())
                         .build());
-
         return shortUrl;
     }
 
@@ -51,6 +57,12 @@ public class UrlService {
 
         return findUrl.getOriginUrl();
     }
+
+    private void findOriginUrl(UrlShortDto urlShortDto) {
+        Optional<Url> findUrl = urlQueryRepository.findByOriginUrlAndExpiration(urlShortDto.getUrl());
+        findUrl.ifPresent(url -> url.setStatus(Status.REMOVE));
+    }
+
 
     private Url findUrl(String encodingUrl) {
         Long urlId = urlEncodingService.decoding(encodingUrl);

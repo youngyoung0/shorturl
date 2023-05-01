@@ -30,7 +30,7 @@ public class UrlQueryRepository {
         return Optional.ofNullable(query.select(url)
                 .from(url)
                 .where(url.originUrl.eq(findUrl)
-                        .and(url.status.ne(Status.EXPIRATION))
+                        .and(url.status.ne(Status.REMOVE))
                 )
                 .fetchOne());
     }

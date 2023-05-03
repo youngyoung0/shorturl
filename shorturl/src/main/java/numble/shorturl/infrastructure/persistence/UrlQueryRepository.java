@@ -2,7 +2,12 @@ package numble.shorturl.infrastructure.persistence;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import numble.shorturl.domain.Status;
+import numble.shorturl.domain.Url;
+import numble.shorturl.domain.dto.UrlShortDto;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 import static numble.shorturl.domain.QUrl.url;
 
@@ -19,5 +24,23 @@ public class UrlQueryRepository {
         return query.select(url.id.max().coalesce(0L))
                 .from(url)
                 .fetchOne();
+    }
+
+    public Optional<Url> findNonRemoveByOriginUrl(String findUrl){
+        return Optional.ofNullable(query.select(url)
+                .from(url)
+                .where(url.originUrl.eq(findUrl)
+                        .and(url.status.ne(Status.REMOVE))
+                )
+                .fetchOne());
+    }
+
+    public Optional<Url> findNonRemoveUrlById(Long id){
+        return Optional.ofNullable(query.select(url)
+                .from(url)
+                .where(url.id.eq(id)
+                        .and(url.status.ne(Status.REMOVE))
+                )
+                .fetchOne());
     }
 }

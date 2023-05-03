@@ -14,7 +14,7 @@ public class ShorturlApplication {
 	@PostConstruct
 	public void started() {
 		// timezone UTC 셋팅
-		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
 	public static void main(String[] args) {

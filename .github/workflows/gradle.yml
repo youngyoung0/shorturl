@@ -26,9 +26,7 @@ jobs:
       run: sudo apt-get -y -qq update && sudo apt-get -y -qq install gradle
 
     - name: Create application.yaml
-      env:
-        APPLICATION_YAML: ${{ secrets.APPLICATION_YAML }}
-      run: echo ${{ env.APPLICATION }} | base64 --decode > ./src/main/resources/application.yaml
+      run: echo ${{ secrets.APPLICATION }} | base64 --decode > ./src/main/resources/application.yaml
 
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew

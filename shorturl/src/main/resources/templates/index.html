@@ -11,18 +11,33 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script>
 
-        function urlSend(evt){
+        function urlSend(){
+            let status = "ACTIVATION";
+            let expireDate = 0;
+            if($('input[name=status]:checked').val() != null){
+                status = "EXPIRATION"
+                expireDate = parseInt($('input[name=status]:checked').val());
+            }
 
-            console.log(evt.target.url.value);
-            // var formData = $("#form").serializeObject();
-            // console.log(formData);
-            // console.log(JSON.stringify(formData));
+            let formData = {
+                "url": $('input[name=url]').val(),
+                "expireDate": expireDate,
+                "status" : status
+            };
+            console.log(formData);
+
             $.ajax({
-                url:'',
-                type:'GET',
-                contentType: 'application/json',
-                data: JSON.stringify(formData)
-            })
+                url:'/url/issue',
+                type:'POST',
+                contentType: 'application/json',  // 추가
+                data: JSON.stringify(formData),
+                success : function (data){
+                    alert(data);
+                },
+                error: function (error){
+                    alert(error);
+                }
+            });
         }
     </script>
     <meta charset="UTF-8">
@@ -33,9 +48,9 @@
 <form id="form">
     <div class="input-group input-group-lg">
         <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-lg">Large</span>
+            <span class="input-group-text" id="inputGroup-sizing-lg">URL</span>
         </div>
-        <input type="text" name="url" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+        <input type="text" id="url" name="url" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
     </div>
 
     <div class="form-check">
@@ -52,12 +67,12 @@
     </div>
     <div class="form-check">
         <input class="form-check-input" type="radio" name="status" value="150" id="flexRadioDefault3">
-        <label class="form-check-label" for="flexRadioDefault2">
+        <label class="form-check-label" for="flexRadioDefault3">
             6달
         </label>
     </div>
 
-    <input type="button" onclick="urlSend(ev)" value="생성">
+    <input type="button" onclick="urlSend()" value="생성">
 </form>
 </body>
 </html>

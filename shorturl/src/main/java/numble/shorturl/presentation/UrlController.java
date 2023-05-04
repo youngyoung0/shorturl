@@ -5,9 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import numble.shorturl.application.UrlService;
 import numble.shorturl.domain.dto.UrlShortDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -17,8 +15,9 @@ public class UrlController {
 
     private final UrlService urlService;
 
-    @GetMapping("url/issue")
-    public String urlIssue (UrlShortDto urlShortDto){
+    @PostMapping("url/issue")
+    public String urlIssue (@RequestBody UrlShortDto urlShortDto){
+        System.out.println(urlShortDto);
         return urlService.urlIssue(urlShortDto);
     }
 

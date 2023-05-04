@@ -40,6 +40,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.0-api
 	implementation 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
+	//thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
 }
 
@@ -71,4 +74,9 @@ tasks.compileQuerydsl.dependsOn(clean);
 
 compileQuerydsl{
 	options.annotationProcessorPath = configurations.querydsl
+}
+
+bootJar{
+	archivesBaseName = 'short-url'
+	archiveFileName = 'short-ru.jar'
 }

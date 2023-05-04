@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -32,13 +33,11 @@ class UrlServiceTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    @DisplayName("인코딩_URL_호출")
-//    public void callUrl(){
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .get("/B"))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    public void subString(){
+        String encodingUrl = "localhost:8080/D+";
+        System.out.println(encodingUrl.charAt(encodingUrl.length() - 1));
+    }
 
     @Test
     @DisplayName("URL 디코딩")

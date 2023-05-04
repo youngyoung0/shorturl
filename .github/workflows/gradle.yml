@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env :
-      working-directory: ./
+      working-directory: ./shorturl
       APPLICATION: ${{ secrets.APPLICATION }}
 
     steps:
@@ -26,9 +26,7 @@ jobs:
       run: sudo apt-get -y -qq update && sudo apt-get -y -qq install gradle
 
     - name: Create application.yaml
-      run: |
-          cd ./shorturl/src/main/resources
-          echo ${{ secrets.APPLICATION }} | base64 --decode > ./shorturl/src/main/resources/application.yaml
+      run: echo ${{ secrets.APPLICATION }} | base64 --decode > ./src/main/resources/application.yaml
 
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew

@@ -35,10 +35,10 @@ public class UrlQueryRepository {
                 .fetchOne());
     }
 
-    public Optional<Url> findNonRemoveUrlById(Long id){
+    public Optional<Url> findNonRemoveUrlById(String shortUrl){
         return Optional.ofNullable(query.select(url)
                 .from(url)
-                .where(url.id.eq(id)
+                .where(url.shortUrl.eq(shortUrl)
                         .and(url.status.ne(Status.REMOVE))
                 )
                 .fetchOne());

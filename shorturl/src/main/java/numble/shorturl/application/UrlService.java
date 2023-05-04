@@ -6,16 +6,16 @@ import numble.shorturl.domain.Browser;
 import numble.shorturl.domain.Status;
 import numble.shorturl.domain.Url;
 import numble.shorturl.domain.UrlCall;
+import numble.shorturl.domain.dto.CallUrlDto;
 import numble.shorturl.domain.dto.UrlShortDto;
+import numble.shorturl.infrastructure.persistence.UrlCallQueryRepository;
 import numble.shorturl.infrastructure.persistence.UrlCallRepository;
 import numble.shorturl.infrastructure.persistence.UrlQueryRepository;
 import numble.shorturl.infrastructure.persistence.UrlRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -25,6 +25,7 @@ public class UrlService {
     private final UrlRepository urlRepository;
     private final UrlCallRepository urlCallRepository;
     private final UrlQueryRepository urlQueryRepository;
+    private final UrlCallQueryRepository urlCallQueryRepository;
     private final UrlEncodingService urlEncodingService;
     private final RefererServlet refererServlet;
 
@@ -37,28 +38,44 @@ public class UrlService {
 
         long urlMaxId = urlQueryRepository.findUrlIdMax() + 1;
         String encodingUrl = UrlEncodingService.encoding(urlMaxId);
-        String shortUrl = MAIN_URL + encodingUrl;
 
         urlRepository.save(
                 Url.builder()
                         .originUrl(urlShortDto.getUrl())
-                        .shortUrl(shortUrl)
+                        .shortUrl(encodingUrl)
                         .status(urlShortDto.getStatus())
                         .expireDate(urlShortDto.getExpireDate())
                         .build());
-        return shortUrl;
+        return MAIN_URL + encodingUrl;
     }
 
     @Transactional
-    public String callUrl(HttpServletRequest request, String encodingUrl) {
+    public CallUrlDto callUrl(HttpServletRequest request, String encodingUrl) {
 
-        Url findUrl = findUrl(request, encodingUrl);
+        if(checkUrlStatistics(encodingUrl)){
+            String shortUrl = encodingUrl.substring(0, encodingUrl.length() - 1);
+            CallUrlDto urlDto = CallUrlDto.builder()
+                    .urlStatisticsDto(urlCallQueryRepository.findStatisticsByUrlId(shortUrl))
+                    .build();
+            return  urlDto;
+        }
+
+        Url findUrl = urlQueryRepository.findNonRemoveUrlById(encodingUrl).get();
 
         if(checkUrlExpiration(findUrl)){
             urlHistorySave(request, findUrl);
-            return findUrl.getOriginUrl();
+            return CallUrlDto.builder()
+                    .url(findUrl.getOriginUrl())
+                    .build();
         }
-        return "url이 만료되었습니다.";
+        return CallUrlDto.builder()
+                .message("url이 만료되었습니다.")
+                .build();
+    }
+
+    private boolean checkUrlStatistics(String encodingUrl) {
+        return encodingUrl.charAt(encodingUrl.length() - 1) == '+';
+
     }
 
     private void urlToStatus(UrlShortDto urlShortDto) {
@@ -66,17 +83,13 @@ public class UrlService {
         findUrl.ifPresent(url -> url.setStatus(Status.REMOVE));
     }
 
-
-    private Url findUrl(HttpServletRequest request, String encodingUrl) {
-
-        Long urlId = urlEncodingService.decoding(encodingUrl);
-        return urlQueryRepository.findNonRemoveUrlById(urlId).get();
-    }
-
     private boolean checkUrlExpiration(Url findUrl){
 
-        LocalDateTime severTime = LocalDateTime.now();
-        return severTime.isBefore(findUrl.getExpiredTime());
+        if(findUrl.getStatus().equals(Status.EXPIRATION)){
+            LocalDateTime severTime = LocalDateTime.now();
+            return severTime.isBefore(findUrl.getExpiredTime()) ;
+        }
+        return true;
     }
 
     private Browser searchBrowser(HttpServletRequest request) {

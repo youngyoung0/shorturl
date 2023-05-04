@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import numble.shorturl.application.UrlService;
+import numble.shorturl.domain.dto.CallUrlDto;
 import numble.shorturl.domain.dto.UrlShortDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,13 @@ public class UrlController {
     }
 
     @GetMapping("{url}")
-    public void callUrl(HttpServletRequest request , HttpServletResponse response, @PathVariable("url")String encodingUrl) throws IOException {
-        response.sendRedirect(urlService.callUrl(request, encodingUrl));
-
+    public CallUrlDto callUrl(HttpServletRequest request , HttpServletResponse response, @PathVariable("url")String encodingUrl) throws IOException {
+        CallUrlDto callUrlDto = urlService.callUrl(request, encodingUrl);
+        System.out.println(callUrlDto);
+        if(callUrlDto.getUrl() == null){
+            return  urlService.callUrl(request, encodingUrl);
+        }
+        response.sendRedirect(urlService.callUrl(request, encodingUrl).getUrl());
+        return null;
     }
 }
